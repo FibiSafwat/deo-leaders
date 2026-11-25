@@ -465,7 +465,7 @@
        4. The logo lifts up and, hanging on the wire, pulls the home page up
           from the bottom (loader and #root move together)                    */
     html.deo-loading, html.deo-loading body { overflow: hidden; }
-    #deo-loader {
+    #deo-loader, .deo-transition {
       position: fixed; inset: 0; z-index: 99999;
       display: flex; align-items: center; justify-content: center;
       background: #0d0c0c;
@@ -537,7 +537,8 @@
     }
     @keyframes deo-wire { to { transform: scaleY(1); } }
     /* Lift: small tug down, then up and away; #root rises the same distance */
-    #deo-loader.is-lifting { animation: deo-lift 0.75s both; }
+    #deo-loader.is-lifting,
+    .deo-transition.is-lifting { animation: deo-lift 0.75s both; }
     html.deo-reveal #root  { animation: deo-rise 0.75s both; }
     @keyframes deo-lift {
       0%   { transform: translateY(0);    animation-timing-function: cubic-bezier(0.3, 0, 0.5, 1); }
@@ -701,108 +702,49 @@
       setTimeout(leave, 20000); // safety net if the app never reports ready
     })();
 
-    // Page curtain: window.__deoCurtain(swap) closes the DEO / Leaders halves,
-    // runs swap() (which changes the page) while the screen is covered, then
-    // parts them again. Used by app.js for home ⇄ sign in / apply.
+    // Page transition: window.__deoCurtain(swap) plays the same intro as the
+    // home loading screen (DEO / Leaders slide in, letters fill, wire drops),
+    // swaps the page underneath, then lifts the logo and pulls the new page up.
+    // Used by app.js for home ⇄ sign in / apply.
     (function () {
       var busy = false;
-      function word() {
-        return '<div class="deo-curtain-word"><div class="deo-loader-ghost"></div>' +
-               '<img class="deo-loader-fill" src="brand/leaders-horizontal-white.png" alt=""/></div>';
-      }
-      // dir: "right" (DEO carries the left section off to the right) or
-      //      "left"  (Leaders carries the right section off to the left)
-      window.__deoCurtain = function (swap, dir) {
-        dir = dir === 'left' ? 'left' : 'right';
+      var WORD = '<div class="deo-loader-ghost"></div>' +
+                 '<img class="deo-loader-fill" src="brand/leaders-horizontal-white.png" alt=""/>';
+      window.__deoCurtain = function (swap) {
         var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (busy) return;
         if (reduced || document.getElementById('deo-loader')) { swap(); window.scrollTo(0, 0); return; }
         busy = true;
+        var root = document.documentElement;
         var el = document.createElement('div');
-        el.className = 'deo-curtain';
+        el.className = 'deo-transition';
         el.setAttribute('aria-hidden', 'true');
         el.innerHTML =
-          '<div class="deo-curtain-half deo-curtain-half--deo"><div class="deo-loader-logo">' + word() + '</div></div>' +
-          '<div class="deo-curtain-half deo-curtain-half--leaders"><div class="deo-loader-logo">' + word() + '</div></div>';
+          '<div class="deo-loader-logo">' +
+            '<div class="deo-word deo-word--deo">' + WORD + '</div>' +
+            '<div class="deo-word deo-word--leaders">' + WORD + '</div>' +
+          '</div>' +
+          '<span class="deo-loader-wire"></span>';
         document.body.appendChild(el);
-        el.offsetWidth; // commit the off-screen start position before sliding in
-        el.classList.add('is-closed');
-        var root = document.documentElement;
-        setTimeout(function () {                // halves met + letters filled
+        root.classList.add('deo-loading');
+        // Screen is covered by the dark panel right away: swap the page now
+        // so React has rendered it by the time it gets pulled up.
+        setTimeout(function () {
           try { swap(); } catch (e) { console.error(e); }
           window.scrollTo(0, 0);
-          setTimeout(function () {              // let React paint the new page
-            var L = document.querySelector('.login-left-panel');
-            var R = document.querySelector('.login-right-panel');
-            if (dir === 'right' && L && R && L.offsetWidth > 0 && R.offsetWidth > 0) {
-              wirePull(el, L, R, function () { el.remove(); busy = false; });
-              return;
-            }
-            // Pages without a left/right section: plain sweep
-            root.classList.remove('deo-curtain-reveal');
-            root.offsetWidth;
-            root.classList.add('deo-curtain-reveal');
-            el.classList.add('is-opening', 'is-exit-' + dir);
-            el.classList.remove('is-closed');
-            setTimeout(function () {
-              el.remove();
-              busy = false;
-              setTimeout(function () { root.classList.remove('deo-curtain-reveal'); }, 500);
-            }, 1000);
-          }, 80);
-        }, 1350);
+        }, 60);
+        setTimeout(function () {               // intro done: lift, page rises
+          window.scrollTo(0, 0);
+          root.style.setProperty('--deo-vh', window.innerHeight + 'px');
+          root.classList.add('deo-reveal');
+          el.classList.add('is-lifting');
+          setTimeout(function () {
+            root.classList.remove('deo-loading', 'deo-reveal');
+            el.remove();
+            busy = false;
+          }, 800);
+        }, 1700);
       };
-
-      // Wire pull: DEO hooks a wire to the page's left section and, moving
-      // right, pulls it in from the left edge; Leaders hooks the right section
-      // and, moving left, pulls it in from the right edge.
-      function wirePull(el, L, R, done) {
-        var root = document.documentElement;
-        var halfDeo = el.querySelector('.deo-curtain-half--deo');
-        var halfLea = el.querySelector('.deo-curtain-half--leaders');
-        var logo = halfDeo.querySelector('.deo-loader-logo').getBoundingClientRect();
-        var vw = window.innerWidth;
-        var y = logo.top + logo.height / 2;
-        var wL = L.getBoundingClientRect().width;
-        var wR = R.getBoundingClientRect().width;
-        var deoLeft = logo.left + logo.width * 0.005;    // where the "D" starts
-        var leaRight = logo.right - logo.width * 0.005;  // where the "s" ends
-        var PULL = 1000, EASE = 'cubic-bezier(0.65, 0, 0.3, 1)';
-
-        // Sections wait off-screen; the page behind them goes dark so the
-        // curtain can drop its panels without a flash.
-        L.style.transition = R.style.transition = 'none';
-        L.style.transform = 'translateX(' + (-wL) + 'px)';
-        R.style.transform = 'translateX(' + wR + 'px)';
-        root.classList.add('deo-curtain-pull');
-
-        // Wires live inside each half, so they travel with their word
-        var wireL = document.createElement('span');
-        wireL.className = 'deo-curtain-wire deo-curtain-wire--l';
-        wireL.style.cssText = 'top:' + y + 'px;left:0;width:' + deoLeft + 'px;';
-        halfDeo.appendChild(wireL);
-        var wireR = document.createElement('span');
-        wireR.className = 'deo-curtain-wire deo-curtain-wire--r';
-        wireR.style.cssText = 'top:' + y + 'px;left:' + leaRight + 'px;width:' + (vw - leaRight) + 'px;';
-        halfLea.appendChild(wireR);
-
-        el.offsetWidth;
-        el.classList.add('is-pulling');           // dark panels gone, wires shoot out
-        setTimeout(function () {                  // wires hooked: pull
-          var t = 'transform ' + PULL + 'ms ' + EASE;
-          L.style.transition = R.style.transition = t;
-          halfDeo.style.transition = halfLea.style.transition = t;
-          L.style.transform = R.style.transform = 'translateX(0)';
-          halfDeo.style.transform = 'translateX(' + wL + 'px)';
-          halfLea.style.transform = 'translateX(' + (-wR) + 'px)';
-          setTimeout(function () { el.classList.add('is-letting-go'); }, PULL * 0.7);
-          setTimeout(function () {                // sections in place: unhook
-            L.style.transition = R.style.transition = L.style.transform = R.style.transform = '';
-            root.classList.remove('deo-curtain-pull');
-            setTimeout(done, 350);
-          }, PULL + 30);
-        }, 420);
-      }
     })();
   </script>
   <div id="root"></div>
