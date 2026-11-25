@@ -1084,11 +1084,11 @@
   var DARK = "#1b1a19";
   var CREAM = "#f6f5f3";
   var BORDER = "#e7e4e0";
-  var DEO_LEADERS_LOGO = "/brand/inline/c5bcd1dbf2ca.png";
-  var DEO_LEADERS_LOGO_T = "/brand/inline/cb6e65fc8d4a.png";
-  var DEO_LEADERS_LOGO_HB = "/brand/inline/c5bcd1dbf2ca.png";
-  var DEO_LEADERS_LOGO_VW = "/brand/inline/cb6e65fc8d4a.png";
-  var DEO_SCHOOL_LOGO = "/brand/inline/b681ed53a5cc.png";
+  var DEO_LEADERS_LOGO = "brand/inline/c5bcd1dbf2ca.png";
+  var DEO_LEADERS_LOGO_T = "brand/inline/cb6e65fc8d4a.png";
+  var DEO_LEADERS_LOGO_HB = "brand/inline/c5bcd1dbf2ca.png";
+  var DEO_LEADERS_LOGO_VW = "brand/inline/cb6e65fc8d4a.png";
+  var DEO_SCHOOL_LOGO = "brand/inline/b681ed53a5cc.png";
   // Backend API address: set in config.js (window.DEO_API_URL). Falls back to the local dev server.
   var API_URL = (window.DEO_API_URL || "http://localhost:8000/api").replace(/\/$/, "");
   // ── Careers / Jobs constants ──────────────────────────────────────────────
@@ -2516,16 +2516,16 @@ html.lp-stack .lp-hero::after, html.lp-stack .lp-section::after, html.lp-stack .
 
     /* ── Company / Alumni data ── */
     const alumni = [
-      { name: "Matter Branding",      founder: "Dina Aly",          color: "#3A3A3A", initials: "M",  logo: "/brand/inline/9f25ea2da2b0.png" },
-      { name: "El Gouna",             founder: "Samih Sawiris",      color: "#E8B800", initials: "EG", logo: "/brand/inline/ec7b8670a4a8.png" },
-      { name: "Yodawy",               founder: "Karim Khashaba",     color: "#00B8A9", initials: "Y",  logo: "/brand/inline/6f5667b72e08.png" },
-      { name: "Orcas Tutoring",       founder: "Hossam Taher",       color: "#2563EB", initials: "OT", logo: "/brand/inline/cc075f54fdd8.jpg" },
-      { name: "Khazna",               founder: "Omar Salah",         color: "#1D4ED8", initials: "K",  logo: "/brand/inline/5b3f3dc78858.png" },
-      { name: "Partment",             founder: "Nadim Nagui",        color: "#374151", initials: "P",  logo: "/brand/inline/efb4ca25e9cb.jpg" },
-      { name: "Sekem",                founder: "Helmy Abouleish",    color: "#16A34A", initials: "S",  logo: "/brand/inline/a64c7cee26e2.jpg" },
-      { name: "El Sawy Culturewheel", founder: "Mohamed Elsawy",     color: "#0369A1", initials: "SC", logo: "/brand/inline/f7c5da9c06d1.png" },
-      { name: "TriFactory",           founder: "Ayman Hakki",        color: "#DC2626", initials: "TF", logo: "/brand/inline/0aa59edcb38d.png" },
-      { name: "FUFA",                 founder: "Farah El Ashiry",    color: "#7C3AED", initials: "F",  logo: "/brand/inline/3894da6d4b87.jpg" },
+      { name: "Matter Branding",      founder: "Dina Aly",          color: "#3A3A3A", initials: "M",  logo: "brand/inline/9f25ea2da2b0.png" },
+      { name: "El Gouna",             founder: "Samih Sawiris",      color: "#E8B800", initials: "EG", logo: "brand/inline/ec7b8670a4a8.png" },
+      { name: "Yodawy",               founder: "Karim Khashaba",     color: "#00B8A9", initials: "Y",  logo: "brand/inline/6f5667b72e08.png" },
+      { name: "Orcas Tutoring",       founder: "Hossam Taher",       color: "#2563EB", initials: "OT", logo: "brand/inline/cc075f54fdd8.jpg" },
+      { name: "Khazna",               founder: "Omar Salah",         color: "#1D4ED8", initials: "K",  logo: "brand/inline/5b3f3dc78858.png" },
+      { name: "Partment",             founder: "Nadim Nagui",        color: "#374151", initials: "P",  logo: "brand/inline/efb4ca25e9cb.jpg" },
+      { name: "Sekem",                founder: "Helmy Abouleish",    color: "#16A34A", initials: "S",  logo: "brand/inline/a64c7cee26e2.jpg" },
+      { name: "El Sawy Culturewheel", founder: "Mohamed Elsawy",     color: "#0369A1", initials: "SC", logo: "brand/inline/f7c5da9c06d1.png" },
+      { name: "TriFactory",           founder: "Ayman Hakki",        color: "#DC2626", initials: "TF", logo: "brand/inline/0aa59edcb38d.png" },
+      { name: "FUFA",                 founder: "Farah El Ashiry",    color: "#7C3AED", initials: "F",  logo: "brand/inline/3894da6d4b87.jpg" },
     ];
 
     /* ── Membership benefits (icons: one outline family, 24px, 1.75 stroke) ── */
@@ -2547,9 +2547,9 @@ html.lp-stack .lp-hero::after, html.lp-stack .lp-section::after, html.lp-stack .
     ];
 
     const partners = [
-      { name: "Deutsche Botschaft Kairo", src: "/brand/inline/5237e01ae9d1.png" },
-      { name: "AHK Egypt", src: "/brand/inline/9063742d8b37.png" },
-      { name: "GIZ", src: "/brand/inline/7d6c65641dd8.png" },
+      { name: "Deutsche Botschaft Kairo", src: "brand/inline/5237e01ae9d1.png" },
+      { name: "AHK Egypt", src: "brand/inline/9063742d8b37.png" },
+      { name: "GIZ", src: "brand/inline/7d6c65641dd8.png" },
     ];
 
     const navScrolled = scrollY > 8;
@@ -2669,8 +2669,8 @@ html.lp-stack .lp-hero::after, html.lp-stack .lp-section::after, html.lp-stack .
         h("div", { className: "lp-wrap lp-header-inner" },
           h("a", { className: "lp-logo-link", href: "#top", "aria-label": lang === "de" ? "DEO Leaders – zum Seitenanfang" : "DEO Leaders – back to top",
               onClick: (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } },
-            h("img", { className: "lp-logo-full", src: "/brand/leaders-dark.png", alt: "DEO Leaders", width: 73, height: 44 }),
-            h("img", { className: "lp-logo-icon", src: "/brand/leaders-icon.png", alt: "DEO Leaders", width: 27, height: 32 })),
+            h("img", { className: "lp-logo-full", src: "brand/leaders-dark.png", alt: "DEO Leaders", width: 73, height: 44 }),
+            h("img", { className: "lp-logo-icon", src: "brand/leaders-icon.png", alt: "DEO Leaders", width: 27, height: 32 })),
           h("div", { className: "lp-actions" },
             h("div", { className: "lp-lang", role: "group", "aria-label": lang === "de" ? "Sprache" : "Language" },
               ["de", "en"].map((l) => h("button", { key: l, type: "button", "aria-pressed": lang === l, lang: l,
@@ -2746,13 +2746,13 @@ html.lp-stack .lp-hero::after, html.lp-stack .lp-section::after, html.lp-stack .
               h("article", { className: "lp-pillar" },
                 h("span", { className: "lp-pillar-num", "aria-hidden": "true" }, "01"),
                 h("div", { className: "lp-pillar-stage" },
-                  h("img", { className: "lp-stage-school", src: "/brand/deo-school-logo.png", alt: "Deutsche Evangelische Oberschule Kairo", loading: "lazy" })),
+                  h("img", { className: "lp-stage-school", src: "brand/deo-school-logo.png", alt: "Deutsche Evangelische Oberschule Kairo", loading: "lazy" })),
                 h("p", { className: "lp-meta" }, lang === "de" ? "Gegründet 1873" : "Founded 1873"),
                 h("h3", { className: "lp-h3" }, t.p1_title),
                 h("p", null, t.p1_desc)),
               h("article", { className: "lp-pillar" },
                 h("div", { className: "lp-pillar-stage" },
-                  h("img", { className: "lp-stage-leaders", src: "/brand/leaders-horizontal.png", alt: "DEO Leaders", loading: "lazy" })),
+                  h("img", { className: "lp-stage-leaders", src: "brand/leaders-horizontal.png", alt: "DEO Leaders", loading: "lazy" })),
                 h("p", { className: "lp-meta" }, lang === "de" ? "Alumni-Netzwerk · Est. 2026" : "Alumni network · Est. 2026"),
                 h("h3", { className: "lp-h3" }, t.p2_title),
                 h("p", null, t.p2_desc)),
@@ -2824,9 +2824,9 @@ html.lp-stack .lp-hero::after, html.lp-stack .lp-section::after, html.lp-stack .
       h("footer", { className: "lp-footer" },
         h("div", { className: "lp-wrap lp-footer-inner" },
           h("div", { className: "lp-cobrand" },
-            h("img", { className: "lp-cobrand-lead", src: "/brand/leaders-dark.png", alt: "DEO Leaders", loading: "lazy" }),
+            h("img", { className: "lp-cobrand-lead", src: "brand/leaders-dark.png", alt: "DEO Leaders", loading: "lazy" }),
             h("span", { className: "lp-cobrand-sep", "aria-hidden": "true" }),
-            h("img", { className: "lp-cobrand-school", src: "/brand/deo-school-logo.png", alt: "Deutsche Evangelische Oberschule Kairo", loading: "lazy" })),
+            h("img", { className: "lp-cobrand-school", src: "brand/deo-school-logo.png", alt: "Deutsche Evangelische Oberschule Kairo", loading: "lazy" })),
           h("ul", { className: "lp-footer-links" },
             h("li", null, h("a", { href: "mailto:deoleaders@deokairo.de" }, "deoleaders@deokairo.de")),
             h("li", null, h("a", { href: "https://www.deoleaders.com", target: "_blank", rel: "noreferrer" }, "deoleaders.com")))),
