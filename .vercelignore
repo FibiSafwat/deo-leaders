@@ -1,0 +1,3 @@
+# Never publish backup copies of the site (old code paths, old configuration).
+*.bak-*
+*.bak

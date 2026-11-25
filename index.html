@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>DEO Leaders</title>
+  <!-- Preconnect: reduces DNS + TLS handshake time for CDN/font domains -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin/>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <!-- Fonts: single consolidated request, trimmed weights, swap prevents FOIT -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,600;1,700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/brand/tokens.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--text); background: #f6f5f3; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+    button, input, select, textarea { font-family: inherit; }
+    @keyframes spin { to { transform: rotate(360deg) } }
+  </style>
+
+  <link rel="icon" type="image/png" href="/brand/favicon-64.png"/>
+  <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png"/>
+  <meta name="theme-color" content="#1b1a19"/>
+  <meta name="description" content="DEO Leaders — the alumni network of the Deutsche Evangelische Oberschule Kairo. Powering connections to create bigger impact."/>
+  <style>
+    /* ══ GLOBAL MOBILE RESPONSIVE ══════════════════════════════════════ */
+
+    /* Prevent horizontal scroll */
+    html, body { overflow-x: hidden; }
+
+    /* ── Landing page navbar ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 16px !important; height: 60px !important; }
+      .nav-right { gap: 8px !important; }
+      .nav-apply-btn { display: none !important; }
+    }
+
+    /* ── Landing page sections ── */
+    @media (max-width: 900px) {
+      .pillars-grid  { grid-template-columns: 1fr !important; }
+      .company-grid  { grid-template-columns: repeat(2, 1fr) !important; }
+      .perks-grid    { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 540px) {
+      .company-grid { grid-template-columns: 1fr !important; }
+      .perks-grid   { grid-template-columns: 1fr !important; }
+    }
+
+    /* ── Login page ── */
+    .login-left-panel  { flex: 1; }
+    .login-right-panel { width: 540px; flex-shrink: 0; }
+    @media (max-width: 768px) {
+      .login-left-panel  { display: none !important; }
+      .login-right-panel { width: 100% !important; padding: 28px 20px 40px !important; }
+    }
+    .lg-page { min-height: 100vh; display: flex; background: #f6f5f3; }
+
+    /* Brand panel */
+    .lg-brand { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 48px;
+      padding: 56px clamp(40px, 6vw, 96px); color: #fff; background: #1b1a19; isolation: isolate; }
+    .lg-brand::before { content: ""; position: absolute; inset: 0; z-index: -1;
+      background:
+        radial-gradient(900px 600px at 110% -10%, rgba(247,145,29,0.22), transparent 60%),
+        radial-gradient(700px 500px at -20% 120%, rgba(247,145,29,0.10), transparent 60%),
+        linear-gradient(160deg, #1b1a19 0%, #262321 100%); }
+    .lg-brand::after { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0.5;
+      background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 56px 56px; mask-image: radial-gradient(ellipse at 70% 30%, #000 10%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse at 70% 30%, #000 10%, transparent 70%); }
+    /* Light travelling along the grid lines (same effect as the landing-page CTA) */
+    .lg-grid-light, .lg-grid-beam { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+    .lg-grid-light::before { content: ""; position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(247,145,29,0.75) 1px, transparent 1px), linear-gradient(90deg, rgba(247,145,29,0.75) 1px, transparent 1px);
+      background-size: 56px 56px;
+      -webkit-mask-image: radial-gradient(circle 220px at center, #000, transparent 70%); mask-image: radial-gradient(circle 220px at center, #000, transparent 70%);
+      -webkit-mask-size: 440px 440px; mask-size: 440px 440px; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+      animation: lg-grid-glow 7s ease-in-out infinite alternate; }
+    @keyframes lg-grid-glow {
+      0%   { -webkit-mask-position: 90% 5%;  mask-position: 90% 5%; }
+      50%  { -webkit-mask-position: 30% 60%; mask-position: 30% 60%; }
+      100% { -webkit-mask-position: 75% 95%; mask-position: 75% 95%; } }
+    .lg-grid-light::after { content: ""; position: absolute; left: 0; top: 112px; width: 180px; height: 1px;
+      background: linear-gradient(90deg, transparent, #f7911d, transparent); box-shadow: 0 0 10px 1px rgba(247,145,29,0.8);
+      animation: lg-beam-x 3.5s linear infinite; }
+    @keyframes lg-beam-x { from { transform: translateX(-200px); } to { transform: translateX(60vw); } }
+    .lg-grid-beam::before { content: ""; position: absolute; top: 0; left: calc(56px * 7); width: 1px; height: 140px;
+      background: linear-gradient(180deg, transparent, #f7c317, transparent); box-shadow: 0 0 10px 1px rgba(247,195,23,0.7);
+      animation: lg-beam-y 4.5s linear 1s infinite; }
+    @keyframes lg-beam-y { from { transform: translateY(-160px); } to { transform: translateY(110vh); } }
+    @media (prefers-reduced-motion: reduce) {
+      .lg-grid-light::before { animation: none; }
+      .lg-grid-light::after, .lg-grid-beam::before { display: none; } }
+    .lg-brand-logo { height: 64px; width: auto; margin-left: -17px; object-fit: contain; cursor: pointer; filter: brightness(0) invert(1); }
+    .lg-brand-mid { max-width: 560px; }
+    .lg-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #f7911d; margin-bottom: 20px; }
+    .lg-eyebrow::before { content: ""; width: 28px; height: 2px; background: #f7911d; border-radius: 2px; }
+    .lg-brand-title { font-size: clamp(34px, 3.4vw, 52px); line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 20px; }
+    .lg-brand-title em { font-style: italic; font-weight: 600; color: #f7911d; }
+    .lg-brand-copy { font-size: 17px; line-height: 1.7; color: #c9c4bf; margin-bottom: 40px; max-width: 480px; }
+    .lg-features { list-style: none; display: grid; gap: 12px; }
+    .lg-feature { display: flex; gap: 16px; align-items: center; padding: 14px 16px; border-radius: 14px;
+      position: relative; z-index: 1; background: #2a2622; border: 1px solid #3a342e; box-shadow: 0 6px 18px rgba(0,0,0,0.35); transition: background .2s, border-color .2s, transform .2s; }
+    .lg-feature:hover { background: #312c27; border-color: rgba(247,145,29,0.45); transform: translateX(4px); }
+    .lg-feature-icon { flex-shrink: 0; width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; color: #f7911d; background: #3d2f20; }
+    .lg-feature-title { font-size: 15px; font-weight: 600; color: #fff; }
+    .lg-feature-desc { font-size: 13px; color: #a8a29d; margin-top: 2px; }
+    .lg-stats { display: flex; gap: 48px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .lg-stat-num { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .lg-stat-num .lp-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .lg-stat-num .lp-stat-suffix { color: #f7911d; font-weight: 700; margin-left: 0; }
+    .lg-stat-label { font-size: 12px; color: #a8a29d; text-transform: uppercase; letter-spacing: 0.12em; margin-top: 2px; }
+
+    /* Auth panel */
+    .lg-auth { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 56px; gap: 20px; }
+    .lg-auth > * { width: 100%; max-width: 420px; }
+    .lg-auth-top { display: flex; align-items: center; justify-content: space-between; }
+    .lg-mobile-logo { display: none; height: 36px; width: auto; cursor: pointer; }
+    @media (max-width: 768px) {
+      .lg-mobile-logo { display: block; }
+      .lg-auth { justify-content: flex-start; }
+    }
+    .lg-card { background: #fff; border: 1px solid #ebe7e2; border-radius: 20px; padding: 36px 32px;
+      box-shadow: 0 1px 2px rgba(27,26,25,0.04), 0 12px 32px -12px rgba(27,26,25,0.12); animation: lg-in .35s cubic-bezier(.16,1,.3,1) both; }
+    @media (max-width: 480px) { .lg-card { padding: 28px 20px; border-radius: 16px; } }
+    @keyframes lg-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .lg-form { display: flex; flex-direction: column; gap: 18px; }
+    .lg-head { margin-bottom: 4px; }
+    .lg-title { font-size: 28px; font-weight: 700; color: #1b1a19; letter-spacing: -0.02em; line-height: 1.2; }
+    .lg-sub { font-size: 14.5px; color: #6f6a66; line-height: 1.6; margin-top: 8px; }
+
+    .lg-field { display: flex; flex-direction: column; gap: 7px; }
+    .lg-label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .lg-label { font-size: 13.5px; font-weight: 600; color: #2d2a28; }
+    .lg-input-wrap { position: relative; }
+    .lg-input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #a39d98; display: flex; pointer-events: none; transition: color .15s; }
+    .lg-input-wrap:focus-within .lg-input-icon { color: #f7911d; }
+    .lg-page .lg-input { width: 100%; height: 50px; padding: 0 14px 0 44px; font-size: 15px; color: #1b1a19; background: #faf9f7;
+      border: 1.5px solid #e4e0db !important; border-radius: 12px; outline: none; transition: border-color .15s, box-shadow .15s, background .15s; }
+    .lg-page .lg-input.lg-has-toggle { padding-right: 48px; }
+    .lg-page .lg-input::placeholder { color: #b3ada8; }
+    .lg-page .lg-input:hover { border-color: #cfc9c3 !important; }
+    .lg-page .lg-input:focus { background: #fff; border-color: #f7911d !important; box-shadow: 0 0 0 4px rgba(247,145,29,0.15) !important; }
+    .lg-page .lg-input:-webkit-autofill,
+    .lg-page .lg-input:-webkit-autofill:hover,
+    .lg-page .lg-input:-webkit-autofill:focus { -webkit-text-fill-color: #1b1a19; -webkit-box-shadow: 0 0 0 1000px #fff inset !important; transition: background-color 9999s; }
+    .lg-toggle { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border: none; background: transparent;
+      border-radius: 9px; color: #8c8681; cursor: pointer; display: grid; place-items: center; }
+    .lg-toggle:hover { background: #f1eee9; color: #1b1a19; }
+    .lg-hint { font-size: 12.5px; color: #8c8681; margin-top: -8px; }
+    .lg-hint-ok { color: #15803d; }
+
+    .lg-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 50px; border-radius: 12px;
+      font-size: 15px; font-weight: 700; cursor: pointer; transition: transform .15s, box-shadow .15s, background .15s, border-color .15s; }
+    .lg-btn:focus-visible, .lg-link:focus-visible, .lg-toggle:focus-visible { outline: 3px solid rgba(247,145,29,0.45); outline-offset: 2px; }
+    .lg-btn-primary { margin-top: 6px; border: none; color: #1b1a19; background: linear-gradient(180deg, #f9a03a 0%, #f7911d 100%);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset, 0 8px 20px -8px rgba(247,145,29,0.7); }
+    .lg-btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset, 0 12px 24px -8px rgba(247,145,29,0.8); }
+    .lg-btn-primary:hover:not(:disabled) svg { transform: translateX(3px); }
+    .lg-btn-primary svg { transition: transform .15s; }
+    .lg-btn-primary:disabled { opacity: 0.75; cursor: progress; }
+    .lg-btn-ghost { background: #fff; color: #1b1a19; border: 1.5px solid #e4e0db; font-weight: 600; }
+    .lg-btn-ghost:hover { border-color: #1b1a19; background: #faf9f7; }
+    .lg-spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(27,26,25,0.25); border-top-color: #1b1a19; animation: spin .7s linear infinite; }
+
+    .lg-link { background: none; border: none; padding: 0; cursor: pointer; font: inherit; color: #6f6a66; display: inline-flex; align-items: center; gap: 6px; transition: color .15s; }
+    .lg-link:hover { color: #c66f0c; }
+    .lg-link-sm { font-size: 13px; font-weight: 600; color: #c66f0c; }
+    .lg-link-sm:hover { color: #1b1a19; text-decoration: underline; }
+    .lg-link-strong { font-weight: 700; color: #1b1a19; }
+    .lg-home { font-size: 14px; margin-left: auto; }
+    .lg-back { font-size: 13.5px; font-weight: 600; align-self: flex-start; margin-bottom: -4px; }
+
+    .lg-divider { display: flex; align-items: center; gap: 14px; color: #a39d98; font-size: 12.5px; margin: 6px 0 -4px; }
+    .lg-divider::before, .lg-divider::after { content: ""; flex: 1; height: 1px; background: #ebe7e2; }
+    .lg-apply { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; color: #6f6a66;
+      margin-top: 4px; padding: 14px; border-radius: 12px; background: #faf6f0; border: 1px dashed #ecd9bf; }
+
+    .lg-alert { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; font-size: 13.5px; line-height: 1.5;
+      color: #b42318; background: #fef3f2; border: 1px solid #fecdca; }
+    .lg-alert svg { flex-shrink: 0; margin-top: 1px; }
+
+    .lg-sent { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .lg-sent-icon { width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; color: #f7911d; background: rgba(247,145,29,0.12); margin-bottom: 12px; }
+    .lg-sent .lg-sub { margin-bottom: 20px; }
+    .lg-legal { font-size: 13px; color: #8c8681; text-align: center; }
+    .lg-legal a { color: #1b1a19; font-weight: 600; text-decoration: none; }
+    .lg-legal a:hover { color: #c66f0c; text-decoration: underline; }
+    @media (prefers-reduced-motion: reduce) { .lg-card, .lg-feature, .lg-btn { animation: none !important; transition: none !important; } }
+
+    /* ── TopNav portal header ── */
+    .topnav-wrap { height: 54px; display: flex; align-items: center; gap: 16px; padding: 0 28px; }
+    @media (max-width: 768px) {
+      .topnav-wrap { padding: 0 14px !important; gap: 8px !important; flex-wrap: wrap !important; height: auto !important; min-height: 54px !important; }
+      .topnav-wrap span { font-size: 11px !important; }
+    }
+
+    /* ── Tab bar (Admin + Member) ── */
+    .tab-bar {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    @media (max-width: 768px) {
+      .tab-bar { gap: 0 !important; }
+      .tab-bar button { font-size: 12px !important; padding: 12px 14px !important; white-space: nowrap; }
+    }
+
+    /* ── Portal content area ── */
+    @media (max-width: 768px) {
+      .portal-content { padding: 16px !important; }
+      .member-header   { padding: 20px 20px !important; }
+    }
+
+    /* ── 2-col grids inside portals ── */
+    @media (max-width: 600px) {
+      .form-grid-2 { grid-template-columns: 1fr !important; }
+    }
+
+    /* ── Signup page ── */
+    @media (max-width: 600px) {
+      .signup-card { padding: 28px 20px !important; margin: 16px !important; }
+    }
+
+    /* ── Member profile stats ── */
+    @media (max-width: 600px) {
+      .member-stats { gap: 12px !important; }
+      .member-stats > div { font-size: 11px !important; }
+    }
+
+    /* ── Admin Portal sidebar → horizontal on mobile ── */
+    @media (max-width: 768px) {
+      .admin-layout { flex-direction: column !important; }
+      /* sidebar → horizontal scroller: see .ui-sidebar rules in the UI system block */
+    }
+
+    /* ── Login mobile header ── */
+    .login-mobile-header {
+      display: none;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 0 24px 0;
+    }
+    @media (max-width: 768px) {
+      .login-mobile-header { display: flex !important; }
+      .login-right-panel { align-items: flex-start !important; padding-top: 28px !important; }
+    }
+
+    /* ── Modal inner content: never overflow the screen ── */
+    .modal-body { box-sizing: border-box; width: 100%; }
+    @media (max-width: 600px) {
+      /* Modal inner padding tighter */
+      .modal-body { padding: 20px 16px !important; }
+      /* 2-col form grids inside modals → single column */
+      .modal-body .form-2col { grid-template-columns: 1fr !important; }
+      /* Attachment button row in CreatePostModal wraps */
+      .modal-attach-row { flex-wrap: wrap !important; }
+    }
+
+    /* ── Newsfeed tab ── */
+    @media (max-width: 600px) {
+      /* Composer quick-action buttons: wrap onto two rows */
+      .feed-quick-btns { flex-wrap: wrap !important; gap: 6px !important; }
+      .feed-quick-btns button { font-size: 12px !important; padding: 7px 12px !important; }
+      /* Feed cards: tighter padding */
+      .feed-card { padding: 14px 14px !important; }
+      /* Member portal: collapse the max-width padding */
+      .portal-content { padding: 12px !important; }
+    }
+
+    /* ── Admin content area ── */
+    @media (max-width: 768px) {
+      .admin-content { padding: 16px !important; overflow-x: auto !important; }
+    }
+
+    /* ── Admin data tables: min-width so fr columns don't compress ── */
+    /* Parent (.admin-content) already has overflow:auto, so table scrolls cleanly */
+    @media (max-width: 768px) {
+      .admin-table { min-width: 580px !important; }
+    }
+
+    /* ── Blast Mail recipient filter grid ── */
+    @media (max-width: 768px) {
+      .blast-filters { grid-template-columns: 1fr 1fr !important; }
+    }
+
+    /* ── Member portal tab bar: 7 tabs fit on scroll ── */
+    @media (max-width: 600px) {
+      .tab-bar button { font-size: 11px !important; padding: 10px 10px !important; }
+    }
+
+    /* ── Member header: stack avatar + info vertically on tiny screens ── */
+    @media (max-width: 480px) {
+      .member-header { flex-direction: column !important; align-items: flex-start !important; gap: 14px !important; }
+      .member-header > div:last-child { text-align: left !important; }
+    }
+
+    /* ── CTA Apply Button: pulse glow animation ── */
+    @keyframes cta-glow {
+      0%,100% { box-shadow: 0 4px 15px rgba(247,145,29,0.30); }
+      50%      { box-shadow: 0 4px 28px rgba(247,145,29,0.55), 0 0 0 6px rgba(247,145,29,0.10); }
+    }
+    @media (prefers-reduced-motion: reduce) { .cta-apply-btn { animation: none; } }
+    .cta-apply-btn {
+      animation: cta-glow 2.8s ease-in-out infinite;
+      transition: transform 0.18s ease, box-shadow 0.18s ease !important;
+    }
+    .cta-apply-btn:hover {
+      transform: translateY(-2px) scale(1.03) !important;
+      animation: none;
+      box-shadow: 0 8px 28px rgba(247,145,29,0.45) !important;
+    }
+
+    /* ══ PORTAL UI SYSTEM — shared components (Btn, fields, Modal, nav, tabs) ══ */
+    :root {
+      --accent-text: #9a4a00;
+      --accent-tint: #fdf0e1;
+      --surface-muted: #f1efec;
+      --ink-2: #3d3839;
+      --input-border: #d6d2ce;
+      --shadow-sm: 0 1px 2px rgba(27,26,25,0.06);
+      --shadow-lg: 0 24px 48px -12px rgba(27,26,25,0.30);
+    }
+    ::selection { background: #fbd9b0; color: var(--text); }
+
+    /* Buttons */
+    .ui-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 0 18px; border: 1px solid transparent; border-radius: var(--radius-control); font-size: 14px; font-weight: 600; line-height: 1.2; cursor: pointer; white-space: nowrap; transition: background var(--motion-fast), border-color var(--motion-fast), color var(--motion-fast), box-shadow var(--motion-fast), transform var(--motion-fast); }
+    .ui-btn--sm { min-height: 32px; padding: 0 12px; font-size: 13px; }
+    .ui-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .ui-btn:active:not(:disabled) { transform: translateY(1px); }
+    .ui-btn--primary { background: var(--action); color: var(--action-text); }
+    .ui-btn--primary:hover:not(:disabled) { background: var(--action-hover); }
+    .ui-btn--secondary { background: #fff; color: var(--text); border-color: var(--border); box-shadow: var(--shadow-sm); }
+    .ui-btn--secondary:hover:not(:disabled) { background: var(--surface-subtle); border-color: #cfcac4; }
+    .ui-btn--ghost { background: transparent; color: var(--text-muted); border-color: var(--border); }
+    .ui-btn--ghost:hover:not(:disabled) { background: var(--surface-muted); color: var(--text); }
+    .ui-btn--danger { background: #fdecee; color: var(--error); }
+    .ui-btn--danger:hover:not(:disabled) { background: #f9d6db; }
+    .ui-btn--success { background: #e6f3ec; color: var(--success); }
+    .ui-btn--success:hover:not(:disabled) { background: #d3eadd; }
+    @media (pointer: coarse) { .ui-btn { min-height: 44px; } .ui-btn--sm { min-height: 36px; } }
+
+    /* Form fields */
+    .ui-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .ui-label { font-size: 13px; font-weight: 600; color: var(--ink-2); line-height: 1.35; }
+    .ui-req { color: var(--error); }
+    .ui-hint { font-size: 12px; color: var(--text-muted); line-height: 1.45; }
+    .ui-input { width: 100%; min-height: 40px; padding: 9px 12px; border: 1px solid var(--input-border); border-radius: var(--radius-control); background: #fff; font-size: 14px; color: var(--text); outline: none; transition: border-color var(--motion-fast), box-shadow var(--motion-fast); }
+    textarea.ui-input { resize: vertical; line-height: 1.5; }
+    select.ui-input { cursor: pointer; appearance: none; -webkit-appearance: none; padding-right: 36px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23625d5e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+    .ui-input::placeholder { color: #9a9496; }
+    .ui-input:hover { border-color: #bdb7b2; }
+    .ui-input:focus { border-color: var(--focus); box-shadow: 0 0 0 3px rgba(21,87,160,0.15); }
+    /* Upgrade ad-hoc inputs elsewhere in the app (they set outline:none inline) */
+    :where(input, select, textarea):not(.ui-input):not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([style*="border: none"]):focus { border-color: var(--focus) !important; box-shadow: 0 0 0 3px rgba(21,87,160,0.15) !important; }
+
+    /* Switch */
+    .ui-toggle-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 0; }
+    .ui-toggle-label { font-size: 14px; font-weight: 500; color: var(--text); }
+    .ui-switch { position: relative; width: 40px; height: 24px; flex-shrink: 0; padding: 0; border: none; border-radius: 999px; background: #c9c4bf; cursor: pointer; transition: background var(--motion-standard); }
+    .ui-switch.is-on { background: var(--action); }
+    .ui-switch-knob { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: transform var(--motion-standard); }
+    .ui-switch.is-on .ui-switch-knob { transform: translateX(16px); }
+
+    /* Modal */
+    .ui-overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(27,26,25,0.55); backdrop-filter: blur(2px); animation: ui-fade var(--motion-standard) ease-out; }
+    .ui-modal { width: 100%; max-height: min(92vh, 960px); display: flex; flex-direction: column; overflow: hidden; background: #fff; border-radius: var(--radius-panel); box-shadow: var(--shadow-lg); outline: none; animation: ui-pop var(--motion-standard) ease-out; }
+    .ui-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px 16px 24px; border-bottom: 1px solid var(--border); }
+    .ui-modal-title { margin: 0; font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text); }
+    .ui-modal-body { flex: 1; overflow: auto; padding: 24px; }
+    .ui-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; flex-shrink: 0; border: none; border-radius: 8px; background: transparent; color: var(--text-muted); cursor: pointer; transition: background var(--motion-fast), color var(--motion-fast); }
+    .ui-icon-btn:hover { background: var(--surface-muted); color: var(--text); }
+    @keyframes ui-fade { from { opacity: 0; } }
+    @keyframes ui-pop { from { opacity: 0; transform: translateY(8px) scale(0.985); } }
+    @media (max-width: 600px) {
+      .ui-overlay { padding: 0; align-items: flex-end; }
+      .ui-modal { max-height: 94vh; border-radius: 16px 16px 0 0; }
+      .ui-modal-head { padding: 12px 12px 12px 16px; }
+      .ui-modal-body { padding: 20px 16px; }
+    }
+
+    /* Stat cards, tags, counters */
+    .ui-stat { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-panel); padding: 18px 20px; }
+    .ui-stat-label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; font-weight: 500; color: var(--text-muted); }
+    .ui-stat-dot { width: 8px; height: 8px; flex-shrink: 0; border-radius: 50%; background: var(--action); }
+    .ui-stat-value { font-size: 28px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; color: var(--text); font-variant-numeric: tabular-nums; }
+    .ui-tag { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 6px; background: var(--surface-muted); color: var(--ink-2); font-size: 12px; font-weight: 500; }
+    .ui-count { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; margin-left: auto; padding: 0 6px; border-radius: 999px; background: var(--error); color: #fff; font-size: 11px; font-weight: 700; line-height: 1; }
+    .ui-count--tab { position: absolute; top: 4px; right: 0; min-width: 18px; height: 18px; font-size: 10px; }
+    .ui-page-title { margin: 0; font-size: 24px; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; color: var(--text); }
+
+    /* Top bar */
+    .ui-topnav { height: 60px; padding: 0 24px; gap: 14px; background: var(--deo-charcoal); border-bottom: 1px solid #2e2c2b; }
+    .ui-topnav-brand { display: flex; align-items: center; margin-left: -4px; padding: 4px; border: none; border-radius: 6px; background: none; cursor: pointer; }
+    .ui-topnav-sep { width: 1px; height: 22px; background: #3a3837; }
+    .ui-topnav-context { font-size: 13px; font-weight: 600; color: #c9c4bf; letter-spacing: 0.01em; }
+    .ui-topnav-btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border: 1px solid #3a3837; border-radius: 8px; background: transparent; color: #e4e0dc; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background var(--motion-fast), border-color var(--motion-fast), color var(--motion-fast); }
+    .ui-topnav-btn:hover { background: #2a2827; border-color: #4a4746; color: #fff; }
+    .ui-topnav-btn--accent { border-color: rgba(247,145,29,0.45); color: var(--deo-orange); }
+    .ui-topnav-btn--accent:hover { background: rgba(247,145,29,0.12); border-color: var(--deo-orange); color: #ffb05a; }
+    .ui-topnav-lang { padding: 0 10px; font-size: 12px; letter-spacing: 0.06em; }
+    .ui-topnav :focus-visible { outline-color: #8ab8ec; }
+    @media (max-width: 768px) {
+      .ui-topnav { padding: 8px 12px !important; gap: 8px !important; }
+      .ui-topnav-sep, .ui-topnav-context { display: none; }
+      .ui-topnav-btn { height: 32px; padding: 0 10px; font-size: 12px; }
+    }
+
+    /* Admin sidebar */
+    .ui-sidebar { width: 240px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px; padding: 16px 12px; overflow-y: auto; background: #fff; border-right: 1px solid var(--border); }
+    .ui-side-heading { padding: 4px 12px 10px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .ui-side-item { position: relative; display: flex; align-items: center; gap: 12px; width: 100%; min-height: 40px; padding: 0 12px; border: none; border-radius: 8px; background: transparent; color: #4a4546; font-size: 14px; font-weight: 500; text-align: left; cursor: pointer; transition: background var(--motion-fast), color var(--motion-fast); }
+    .ui-side-item svg { flex-shrink: 0; color: #8a8486; transition: color var(--motion-fast); }
+    .ui-side-item:hover { background: var(--surface-subtle); color: var(--text); }
+    .ui-side-item.is-active { background: var(--accent-tint); color: var(--text); font-weight: 600; }
+    .ui-side-item.is-active svg { color: #c96a00; }
+    @media (max-width: 768px) {
+      .ui-sidebar { width: 100%; flex-direction: row; gap: 4px; padding: 8px 12px; border-right: none; border-bottom: 1px solid var(--border); overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+      .ui-sidebar::-webkit-scrollbar { display: none; }
+      .ui-side-heading { display: none; }
+      .ui-side-item { width: auto; flex-shrink: 0; min-height: 38px; gap: 8px; font-size: 13px; white-space: nowrap; }
+    }
+
+    /* Member portal tabs + segmented control */
+    .ui-tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+    .ui-tabs::-webkit-scrollbar { display: none; }
+    .ui-tab { position: relative; flex-shrink: 0; padding: 12px 14px; border: none; background: transparent; color: var(--text-muted); font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: color var(--motion-fast); }
+    .ui-tab::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 0; height: 2px; border-radius: 2px; background: transparent; transition: background var(--motion-fast); }
+    .ui-tab:hover { color: var(--text); }
+    .ui-tab.is-active { color: var(--text); font-weight: 600; }
+    .ui-tab.is-active::after { background: var(--action); }
+    .ui-seg { display: inline-flex; gap: 2px; margin-bottom: 20px; padding: 3px; border-radius: 10px; background: var(--surface-muted); }
+    .ui-seg-btn { padding: 7px 16px; border: none; border-radius: 8px; background: transparent; color: var(--text-muted); font-size: 13px; font-weight: 500; cursor: pointer; transition: background var(--motion-fast), color var(--motion-fast); }
+    .ui-seg-btn:hover { color: var(--text); }
+    .ui-seg-btn.is-active { background: #fff; color: var(--text); font-weight: 600; box-shadow: 0 1px 2px rgba(27,26,25,0.12); }
+
+    /* Scrollbars (desktop) */
+    @media (pointer: fine) {
+      .admin-content::-webkit-scrollbar, .ui-modal-body::-webkit-scrollbar { width: 10px; height: 10px; }
+      .admin-content::-webkit-scrollbar-thumb, .ui-modal-body::-webkit-scrollbar-thumb { background: #d6d2ce; border-radius: 10px; border: 3px solid transparent; background-clip: padding-box; }
+    }
+
+    /* ── Mobile hero: lift content up so CTA is above the fold ── */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 88px 20px 40px !important;
+        min-height: 100svh !important;
+        justify-content: flex-start !important;
+      }
+      .hero-logo    { height: 110px !important; margin-bottom: 24px !important; }
+      .hero-subtitle { font-size: 14px !important; margin-bottom: 28px !important; max-width: 100% !important; }
+    }
+    @media (max-width: 430px) {
+      .hero-logo    { height: 90px !important; margin-bottom: 16px !important; }
+      .hero-subtitle { display: none !important; }
+    }
+
+    /* ══ LOADING SCREEN ═══════════════════════════════════════════════════
+       1. "DEO" slides in from the left, "Leaders" from the right (black bg)
+       2. Colour fills the letters like rising liquid
+       3. A wire drops from the logo to the bottom edge
+       4. The logo lifts up and, hanging on the wire, pulls the home page up
+          from the bottom (loader and #root move together)                    */
+    html.deo-loading, html.deo-loading body { overflow: hidden; }
+    #deo-loader {
+      position: fixed; inset: 0; z-index: 99999;
+      display: flex; align-items: center; justify-content: center;
+      background: #0d0c0c;
+      overflow: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    #deo-loader.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
+    .deo-loader-logo {
+      --w: min(460px, 78vw);          /* logo width (height = w × 0.2069) */
+      position: relative;
+      width: var(--w);
+      aspect-ratio: 1305 / 270;
+    }
+    /* Each word is a full-size copy of the logo, clipped to that word */
+    .deo-word { position: absolute; inset: 0; opacity: 0; }
+    .deo-word--deo {
+      clip-path: inset(0 54% 0 0);
+      animation: deo-from-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
+    }
+    .deo-word--leaders {
+      clip-path: inset(0 0 0 46%);
+      animation: deo-from-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
+    }
+    @keyframes deo-from-left  { from { opacity: 0; transform: translateX(-60vw); } to { opacity: 1; transform: none; } }
+    @keyframes deo-from-right { from { opacity: 0; transform: translateX(60vw); }  to { opacity: 1; transform: none; } }
+    /* Empty letters: dark silhouette */
+    .deo-loader-ghost {
+      position: absolute; inset: 0;
+      background: #2c2928;
+      -webkit-mask: url(/brand/leaders-horizontal.png) center / contain no-repeat;
+              mask: url(/brand/leaders-horizontal.png) center / contain no-repeat;
+    }
+    /* Liquid colour: the logo (white "Leaders" version) masked by a wave whose
+       surface sits at --lvl and rises; --wx scrolls the wave so it sloshes. */
+    @property --lvl { syntax: "<length>"; inherits: false; initial-value: 0px; }
+    @property --wx  { syntax: "<length>"; inherits: false; initial-value: 0px; }
+    .deo-loader-fill {
+      --wh: calc(var(--w) * 0.045);   /* wave height */
+      --ww: calc(var(--w) * 0.16);    /* wave length */
+      --lvl: calc(var(--w) * 0.21);   /* start: below the logo (empty) */
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20' preserveAspectRatio='none'%3E%3Cpath d='M0 10 Q25 0 50 10 T100 10 V20 H0Z'/%3E%3C/svg%3E"), linear-gradient(#000, #000);
+              mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20' preserveAspectRatio='none'%3E%3Cpath d='M0 10 Q25 0 50 10 T100 10 V20 H0Z'/%3E%3C/svg%3E"), linear-gradient(#000, #000);
+      -webkit-mask-size: var(--ww) var(--wh), 100% 100%;
+              mask-size: var(--ww) var(--wh), 100% 100%;
+      -webkit-mask-repeat: repeat-x, no-repeat;
+              mask-repeat: repeat-x, no-repeat;
+      -webkit-mask-position: var(--wx) var(--lvl), 0 calc(var(--lvl) + var(--wh) - 1px);
+              mask-position: var(--wx) var(--lvl), 0 calc(var(--lvl) + var(--wh) - 1px);
+      animation:
+        deo-fill 0.8s cubic-bezier(0.45, 0, 0.3, 1) 0.55s forwards,
+        deo-wave 0.9s linear infinite;
+    }
+    @keyframes deo-fill { to { --lvl: calc(var(--w) * -0.06); } }
+    @keyframes deo-wave { to { --wx: var(--ww); } }
+    /* The wire: drops from under the logo to the bottom edge, where the page hangs */
+    .deo-loader-wire {
+      position: absolute; left: 50%; bottom: 0;
+      top: calc(50% + min(460px, 78vw) * 0.1035 + 10px);
+      width: 2px; margin-left: -1px;
+      background: linear-gradient(var(--deo-orange, #f7911d), rgba(247,145,29,0.55));
+      transform: scaleY(0); transform-origin: top;
+      animation: deo-wire 0.3s cubic-bezier(0.5, 0, 0.2, 1) 1.35s forwards;
+    }
+    .deo-loader-wire::before {         /* small ring where the wire hooks the logo */
+      content: ""; position: absolute; top: -7px; left: 50%;
+      width: 8px; height: 8px; margin-left: -4px; border-radius: 50%;
+      border: 2px solid var(--deo-orange, #f7911d); box-sizing: border-box;
+    }
+    @keyframes deo-wire { to { transform: scaleY(1); } }
+    /* Lift: small tug down, then up and away; #root rises the same distance */
+    #deo-loader.is-lifting { animation: deo-lift 0.75s both; }
+    html.deo-reveal #root  { animation: deo-rise 0.75s both; }
+    @keyframes deo-lift {
+      0%   { transform: translateY(0);    animation-timing-function: cubic-bezier(0.3, 0, 0.5, 1); }
+      16%  { transform: translateY(14px); animation-timing-function: cubic-bezier(0.7, 0, 0.2, 1); }
+      100% { transform: translateY(calc(-1 * var(--deo-vh, 100vh))); }
+    }
+    @keyframes deo-rise {
+      0%   { transform: translateY(var(--deo-vh, 100vh)); animation-timing-function: cubic-bezier(0.3, 0, 0.5, 1); }
+      16%  { transform: translateY(calc(var(--deo-vh, 100vh) + 14px)); animation-timing-function: cubic-bezier(0.7, 0, 0.2, 1); }
+      100% { transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .deo-word { opacity: 1; animation: none; }
+      .deo-loader-fill { animation: none; -webkit-mask: none; mask: none; }
+      .deo-loader-wire { display: none; }
+    }
+
+    /* ══ PAGE CURTAIN (home ⇄ sign in / apply) ═════════════════════════════
+       1. Left half slides in left → right carrying "DEO",
+          right half slides in right → left carrying "Leaders"
+       2. They lock together in the middle and the letters fill with colour
+       3. The page underneath is swapped, then the halves part again
+       4. Sign-in page: brand panel glides in from the left, form from the right */
+    .deo-curtain {
+      position: fixed; inset: 0; z-index: 99998;
+      pointer-events: all; overflow: hidden;
+    }
+    .deo-curtain-half {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1);
+      will-change: transform;
+    }
+    .deo-curtain-half::before {           /* the dark panel of each half */
+      content: ""; position: absolute; top: 0; bottom: 0;
+      background: #0d0c0c;
+    }
+    .deo-curtain-half--deo     { transform: translateX(-100%); }
+    .deo-curtain-half--leaders { transform: translateX(100%); }
+    .deo-curtain-half--deo::before     { left: 0;  right: calc(50% - 1px); }
+    .deo-curtain-half--leaders::before { right: 0; left: calc(50% - 1px); }
+    .deo-curtain.is-closed .deo-curtain-half { transform: none; }
+    .deo-curtain .deo-loader-logo { position: relative; z-index: 1; }
+    .deo-curtain-word { position: absolute; inset: 0; }
+    .deo-curtain-half--deo     .deo-curtain-word { clip-path: inset(0 54% 0 0); }
+    .deo-curtain-half--leaders .deo-curtain-word { clip-path: inset(0 0 0 46%); }
+    .deo-curtain .deo-loader-fill {
+      animation:
+        deo-fill 0.8s cubic-bezier(0.45, 0, 0.3, 1) 0.5s forwards,
+        deo-wave 0.9s linear infinite;
+    }
+    /* Exit: the halves don't part. They keep travelling in one direction.
+       Right (home → sign in): Leaders moves off first, then DEO follows and
+       drags the left section across the screen to the right.
+       Left (back to home): DEO moves off first, then Leaders drags the
+       right section across to the left. */
+    .deo-curtain.is-exit-right .deo-curtain-half,
+    .deo-curtain.is-exit-left  .deo-curtain-half { transition-timing-function: cubic-bezier(0.7, 0, 0.25, 1); }
+    .deo-curtain.is-exit-right .deo-curtain-half--leaders { transform: translateX(100%); transition-duration: 0.6s; }
+    .deo-curtain.is-exit-right .deo-curtain-half--deo     { transform: translateX(100%); transition-duration: 0.85s; transition-delay: 0.12s; }
+    .deo-curtain.is-exit-left  .deo-curtain-half--deo     { transform: translateX(-100%); transition-duration: 0.6s; }
+    .deo-curtain.is-exit-left  .deo-curtain-half--leaders { transform: translateX(-100%); transition-duration: 0.85s; transition-delay: 0.12s; }
+
+    /* Wire pull (home → sign in) */
+    html.deo-curtain-pull #root,
+    html.deo-curtain-pull #root > div,
+    html.deo-curtain-pull #root > div > div { background: #0d0c0c !important; overflow: hidden; }
+    /* the form section carries its own cream background while it's pulled in */
+    html.deo-curtain-pull .login-right-panel { background: #f6f5f3; }
+    /* the sections ride above the curtain, so DEO / Leaders and their wires
+       slip underneath them as they're pulled in */
+    html.deo-curtain-pull .login-left-panel,
+    html.deo-curtain-pull .login-right-panel { position: relative; z-index: 100000; }
+    .deo-curtain.is-pulling { pointer-events: all; }
+    .deo-curtain.is-pulling .deo-curtain-half::before,
+    .deo-curtain.is-pulling .deo-curtain-half--leaders::after { opacity: 0; transition: none; }
+    .deo-curtain-wire {
+      position: absolute; height: 2px; margin-top: -1px;
+      background: var(--deo-orange, #f7911d);
+      box-shadow: 0 0 8px rgba(247,145,29,0.55);
+      transform: scaleX(0);
+      transition: transform 0.38s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.3s ease;
+    }
+    .deo-curtain-wire--l { transform-origin: right center; }   /* shoots left from DEO */
+    .deo-curtain-wire--r { transform-origin: left center; }    /* shoots right from Leaders */
+    .deo-curtain.is-pulling .deo-curtain-wire { transform: scaleX(1); }
+    /* the hook ring where each wire grabs its section */
+    .deo-curtain-wire::after {
+      content: ""; position: absolute; top: 50%;
+      width: 9px; height: 9px; margin-top: -4.5px; border-radius: 50%;
+      border: 2px solid var(--deo-orange, #f7911d); box-sizing: border-box;
+      background: #0d0c0c;
+    }
+    .deo-curtain-wire--l::after { left: -4px; }
+    .deo-curtain-wire--r::after { right: -4px; }
+    /* near the end: wires snap loose and the words fade away */
+    .deo-curtain .deo-loader-logo { transition: opacity 0.35s ease, transform 0.35s ease; }
+    .deo-curtain.is-letting-go .deo-curtain-wire { opacity: 0; }
+    .deo-curtain.is-letting-go .deo-loader-logo { opacity: 0; transform: scale(0.92); }
+
+    /* Sign-in page entrance, triggered as the curtain parts */
+    @keyframes deo-panel-from-left  { from { transform: translateX(-60px); opacity: 0; } to { transform: none; opacity: 1; } }
+    @keyframes deo-panel-from-right { from { transform: translateX(60px);  opacity: 0; } to { transform: none; opacity: 1; } }
+    html.deo-curtain-reveal .login-left-panel > *  { animation: deo-panel-from-left  0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    html.deo-curtain-reveal .login-right-panel > * { animation: deo-panel-from-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    html.deo-curtain-reveal .login-left-panel > :nth-child(2) { animation-delay: 0.08s; }
+    html.deo-curtain-reveal .login-left-panel > :nth-child(3) { animation-delay: 0.16s; }
+    html.deo-curtain-reveal .login-left-panel > :nth-child(4) { animation-delay: 0.24s; }
+    html.deo-curtain-reveal .login-right-panel > * { animation-delay: 0.12s; }
+  </style>
+</head>
+<body>
+  <script>document.documentElement.classList.add('deo-loading');</script>
+  <div id="deo-loader" role="status" aria-label="Loading DEO Leaders">
+    <div class="deo-loader-logo">
+      <div class="deo-word deo-word--deo">
+        <div class="deo-loader-ghost"></div>
+        <img class="deo-loader-fill" src="/brand/leaders-horizontal-white.png" alt=""/>
+      </div>
+      <div class="deo-word deo-word--leaders">
+        <div class="deo-loader-ghost"></div>
+        <img class="deo-loader-fill" src="/brand/leaders-horizontal-white.png" alt=""/>
+      </div>
+    </div>
+    <span class="deo-loader-wire"></span>
+  </div>
+  <script>
+    // Leave the loader once the app has loaded its data (app.js calls
+    // window.__deoAppReady) AND the intro animation has finished.
+    (function () {
+      var start = Date.now();
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var minMs = reduced ? 300 : 1700;
+      var done = false;
+      function finish() {
+        document.documentElement.classList.remove('deo-loading', 'deo-reveal');
+        var el = document.getElementById('deo-loader');
+        if (el) el.remove();
+      }
+      function leave() {
+        if (done) return; done = true;
+        var el = document.getElementById('deo-loader');
+        if (!el) return finish();
+        window.scrollTo(0, 0);
+        if (reduced) {
+          el.classList.add('is-done');
+          document.documentElement.classList.remove('deo-loading');
+          setTimeout(finish, 600);
+          return;
+        }
+        // Logo goes up, page comes up from the bottom, tied together by the wire
+        document.documentElement.style.setProperty('--deo-vh', window.innerHeight + 'px');
+        document.documentElement.classList.add('deo-reveal');
+        el.classList.add('is-lifting');
+        setTimeout(finish, 800);
+      }
+      window.__deoAppReady = function () {
+        window.__deoAppReady = null;
+        setTimeout(leave, Math.max(0, minMs - (Date.now() - start)));
+      };
+      setTimeout(leave, 20000); // safety net if the app never reports ready
+    })();
+
+    // Page curtain: window.__deoCurtain(swap) closes the DEO / Leaders halves,
+    // runs swap() (which changes the page) while the screen is covered, then
+    // parts them again. Used by app.js for home ⇄ sign in / apply.
+    (function () {
+      var busy = false;
+      function word() {
+        return '<div class="deo-curtain-word"><div class="deo-loader-ghost"></div>' +
+               '<img class="deo-loader-fill" src="/brand/leaders-horizontal-white.png" alt=""/></div>';
+      }
+      // dir: "right" (DEO carries the left section off to the right) or
+      //      "left"  (Leaders carries the right section off to the left)
+      window.__deoCurtain = function (swap, dir) {
+        dir = dir === 'left' ? 'left' : 'right';
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (busy) return;
+        if (reduced || document.getElementById('deo-loader')) { swap(); window.scrollTo(0, 0); return; }
+        busy = true;
+        var el = document.createElement('div');
+        el.className = 'deo-curtain';
+        el.setAttribute('aria-hidden', 'true');
+        el.innerHTML =
+          '<div class="deo-curtain-half deo-curtain-half--deo"><div class="deo-loader-logo">' + word() + '</div></div>' +
+          '<div class="deo-curtain-half deo-curtain-half--leaders"><div class="deo-loader-logo">' + word() + '</div></div>';
+        document.body.appendChild(el);
+        el.offsetWidth; // commit the off-screen start position before sliding in
+        el.classList.add('is-closed');
+        var root = document.documentElement;
+        setTimeout(function () {                // halves met + letters filled
+          try { swap(); } catch (e) { console.error(e); }
+          window.scrollTo(0, 0);
+          setTimeout(function () {              // let React paint the new page
+            var L = document.querySelector('.login-left-panel');
+            var R = document.querySelector('.login-right-panel');
+            if (dir === 'right' && L && R && L.offsetWidth > 0 && R.offsetWidth > 0) {
+              wirePull(el, L, R, function () { el.remove(); busy = false; });
+              return;
+            }
+            // Pages without a left/right section: plain sweep
+            root.classList.remove('deo-curtain-reveal');
+            root.offsetWidth;
+            root.classList.add('deo-curtain-reveal');
+            el.classList.add('is-opening', 'is-exit-' + dir);
+            el.classList.remove('is-closed');
+            setTimeout(function () {
+              el.remove();
+              busy = false;
+              setTimeout(function () { root.classList.remove('deo-curtain-reveal'); }, 500);
+            }, 1000);
+          }, 80);
+        }, 1350);
+      };
+
+      // Wire pull: DEO hooks a wire to the page's left section and, moving
+      // right, pulls it in from the left edge; Leaders hooks the right section
+      // and, moving left, pulls it in from the right edge.
+      function wirePull(el, L, R, done) {
+        var root = document.documentElement;
+        var halfDeo = el.querySelector('.deo-curtain-half--deo');
+        var halfLea = el.querySelector('.deo-curtain-half--leaders');
+        var logo = halfDeo.querySelector('.deo-loader-logo').getBoundingClientRect();
+        var vw = window.innerWidth;
+        var y = logo.top + logo.height / 2;
+        var wL = L.getBoundingClientRect().width;
+        var wR = R.getBoundingClientRect().width;
+        var deoLeft = logo.left + logo.width * 0.005;    // where the "D" starts
+        var leaRight = logo.right - logo.width * 0.005;  // where the "s" ends
+        var PULL = 1000, EASE = 'cubic-bezier(0.65, 0, 0.3, 1)';
+
+        // Sections wait off-screen; the page behind them goes dark so the
+        // curtain can drop its panels without a flash.
+        L.style.transition = R.style.transition = 'none';
+        L.style.transform = 'translateX(' + (-wL) + 'px)';
+        R.style.transform = 'translateX(' + wR + 'px)';
+        root.classList.add('deo-curtain-pull');
+
+        // Wires live inside each half, so they travel with their word
+        var wireL = document.createElement('span');
+        wireL.className = 'deo-curtain-wire deo-curtain-wire--l';
+        wireL.style.cssText = 'top:' + y + 'px;left:0;width:' + deoLeft + 'px;';
+        halfDeo.appendChild(wireL);
+        var wireR = document.createElement('span');
+        wireR.className = 'deo-curtain-wire deo-curtain-wire--r';
+        wireR.style.cssText = 'top:' + y + 'px;left:' + leaRight + 'px;width:' + (vw - leaRight) + 'px;';
+        halfLea.appendChild(wireR);
+
+        el.offsetWidth;
+        el.classList.add('is-pulling');           // dark panels gone, wires shoot out
+        setTimeout(function () {                  // wires hooked: pull
+          var t = 'transform ' + PULL + 'ms ' + EASE;
+          L.style.transition = R.style.transition = t;
+          halfDeo.style.transition = halfLea.style.transition = t;
+          L.style.transform = R.style.transform = 'translateX(0)';
+          halfDeo.style.transform = 'translateX(' + wL + 'px)';
+          halfLea.style.transform = 'translateX(' + (-wR) + 'px)';
+          setTimeout(function () { el.classList.add('is-letting-go'); }, PULL * 0.7);
+          setTimeout(function () {                // sections in place: unhook
+            L.style.transition = R.style.transition = L.style.transform = R.style.transform = '';
+            root.classList.remove('deo-curtain-pull');
+            setTimeout(done, 350);
+          }, PULL + 30);
+        }, 420);
+      }
+    })();
+  </script>
+  <div id="root"></div>
+  <script src="/config.js"></script>
+  <script src="/app.js"></script>
+  <script src="/chatbot.js" defer></script>
+</body>
+</html>

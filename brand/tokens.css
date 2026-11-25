@@ -1,0 +1,45 @@
+/* DEO Leaders — working digital palette from supplied swatches. */
+:root {
+  --deo-ink: #231f20;
+  --deo-charcoal: #1b1a19;
+  --deo-yellow: #f7c317;
+  --deo-orange: #f7911d;
+  --deo-red: #dc1a33;
+  --deo-coral: #f79382;
+  --deo-white: #ffffff;
+  --surface: #ffffff;
+  --surface-subtle: #f8f7f5;
+  --surface-dark: var(--deo-charcoal);
+  --text: var(--deo-ink);
+  --text-muted: #625d5e;
+  --border: #dedbd8;
+  --control-border: #858080;
+  --action: var(--deo-orange);
+  --action-text: var(--deo-ink);
+  --action-hover: #e47b09;
+  --focus: #1557a0;
+  --success: #176747;
+  --error: #b4132a;
+  --warning: #855400;
+  --info: #1557a0;
+  --font-sans: "Open Sans", Arial, sans-serif;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --radius-control: 8px;
+  --radius-panel: 12px;
+  --target-min: 44px;
+  --layout-max: 1280px;
+  --motion-fast: 150ms;
+  --motion-standard: 220ms;
+}
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-fast: 0ms; --motion-standard: 0ms; }
+}
