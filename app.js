@@ -2362,12 +2362,6 @@ main > section:nth-of-type(4)::before { background: radial-gradient(30% 42% at 2
 .lp-cobrand-school { background: #fff; padding: 8px 12px; border-radius: 4px; height: 84px; }
 .lp-footer-links a { color: #fff; text-decoration-color: var(--deo-orange); }
 .lp-footer-copy { border-top-color: rgba(255,255,255,0.1); }
-/* giant see-through wordmark filling the footer behind the content */
-.lp-footer-watermark {
-  position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1;
-  pointer-events: none; user-select: none; }
-.lp-footer-watermark text {
-  font-weight: 800; font-size: 270px; fill: rgba(255,255,255,0.025); stroke: none; }
 @media (max-width: 640px) {
   .lp-logo-link img.lp-logo-full { height: 38px; }
   .lp-cobrand-lead { height: 44px; }
@@ -2828,8 +2822,6 @@ html.lp-stack .lp-hero::after, html.lp-stack .lp-section::after, html.lp-stack .
 
       /* ══ FOOTER — lead mark + school endorsement ══════════════ */
       h("footer", { className: "lp-footer" },
-        h("svg", { className: "lp-footer-watermark", "aria-hidden": "true", viewBox: "0 0 1000 200", preserveAspectRatio: "none" },
-          h("text", { x: 0, y: 197, textLength: 1000, lengthAdjust: "spacingAndGlyphs" }, "DEO Leaders")),
         h("div", { className: "lp-wrap lp-footer-inner" },
           h("div", { className: "lp-cobrand" },
             h("img", { className: "lp-cobrand-lead", src: "/brand/leaders-dark.png", alt: "DEO Leaders", loading: "lazy" }),
