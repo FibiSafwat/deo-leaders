@@ -7167,7 +7167,9 @@ html.lp-stack .lp-hero::after, html.lp-stack .lp-section::after, html.lp-stack .
     // curtain defined in index.html; falls back to an instant switch.
     // Forward (to sign in / apply) sweeps right with DEO; back to home sweeps left with Leaders.
     const goWithCurtain = (target, dir) => {
-      if (window.__deoCurtain) window.__deoCurtain(() => setScreen(target), dir || (target === "landing" ? "left" : "right"));
+      // Apply (Bewerben) replays the home loading animation; sign in keeps the curtain.
+      if (target === "signup" && window.__deoLoaderTransition) window.__deoLoaderTransition(() => setScreen(target));
+      else if (window.__deoCurtain) window.__deoCurtain(() => setScreen(target), dir || (target === "landing" ? "left" : "right"));
       else setScreen(target);
     };
 
